@@ -45,6 +45,9 @@
 				_node: audioContext.createScriptProcessor(BUFFER_SIZE, 2, 2),
 				connect: function (node) {
 					this._node.connect(node);
+				},
+				disconnect: function () {
+					this._node.disconnect();
 				}
 			};
 

@@ -1,0 +1,44 @@
+/*
+	Override template stylings
+ */
+.btn:hover {
+	color: #fff;
+}
+
+.wrapper {
+	padding-bottom: 5em;
+}
+
+.intro-box {
+	text-align: center;
+	padding-top: 7em;
+}
+
+.training-box {
+	padding: 2em;
+}
+
+.visual {
+	width: 300px;
+	height: 300px;
+	background-color: #f7f7f7;
+	margin: 0 auto;
+}
+
+.test-box {
+	text-align: center;
+	padding: 2em 0;
+}
+
+.button-wrapper {
+	text-align: center;
+	padding: 1em 0;
+}
+
+.next {
+	text-align: center;
+}
+
+.bottom-section {
+	text-align: center;
+}

@@ -1,9 +1,17 @@
+// Create AudioContext 
 var audioContext = new AudioContext();
 
 /*
 	Creates echo
  */
 function createDelay() {
+	// Create a ScriptProcessorNode with a bufferSize of 256
+	// and a double input and output channel.
+	// This value(256) controls how frequently the audioprocess event
+	// is dispatched and how many sample-frames need to be processed each call.
+	/*
+		Q1. Why double? What does it mean?
+	 */
 	var node = audioContext.createScriptProcessor(256, 2, 2);
 	
 	var del = 250*(44100/1000);
@@ -103,28 +111,40 @@ function createDelay() {
 // 	{measure: 1, start: 10/16, duration: 1/16, tone: 'Eb5'}
 // ];
 
+/**
+ * [TODO]
+ *  Define different types of scale like A minor, C sharp something.....
+ */
 var major = [ 0, 2, 4, 5, 7, 9, 11, 12 ];
-var notesLead = [];
 
-major.forEach(function(semi, i) {
-	var position = Math.floor(Math.random() * major.length);
-	
-	notesLead.push({
-		measure: Math.floor(position/16), 
-		// Every 1/16 of node
-		start: (position % 16)/ 16,
-		// A music is divided into 4 measures in western music
-		duration: 1/ 16,
-		tone: semi + 60 - 5
+
+function generateMelody() {
+	var notesLead = [];
+
+	major.forEach(function(semi, i) {
+		var position = Math.floor(Math.random() * major.length);
+		
+		notesLead.push({
+			measure: Math.floor(position/16), 
+			// Every 1/16 of node
+			start: (position % 16)/ 16,
+			// A music is divided into 4 measures in western music
+			duration: 1/ 16,
+			tone: semi + 60 - 5
+		});
 	});
-});
+	// Put them in the order
+	notesLead.sort(function(a, b) {
+		return a.start - b.start;
+	});
+	return notesLead;
+}
 
-notesLead.sort(function(a, b) {
-	return a.start - b.start;
-});
-
+var notesLead = generateMelody();
 var delay = createDelay();
 var reverb = audioContext.createConvolver();
+
+// Create buffer source
 var noiseBuffer = audioContext.createBuffer(2, 44100/2, 44100);
 var left = noiseBuffer.getChannelData(0);
 var right = noiseBuffer.getChannelData(1);
@@ -159,8 +179,6 @@ lead.sound = function (note, time) {
 lead.connect(delay);
 // delay.connect(reverb);
 delay.connect(audioContext.destination);
-
-
 
 
 

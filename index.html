@@ -3,12 +3,74 @@
 <html lang='en'>
 	<head>
 		<meta charset='utf-8'>
-		<title>Synthesizer</title>
+		<title>AI - Generative Music and Visualizer</title>
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<link rel="stylesheet" href="css/materialize.css">
+		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
+		<div class="wrapper">
+			<div class="container">
+				<div class="intro-box">
+					<h5>Generate a sound according to your taste</h5>
+				</div>
+				<div class="training-box clearfix"> 
+					<div class="pull-left col-xs-6">
+						<!-- <div class="visual">
+							visualizer 1
+						</div> -->
+						<div class="button-wrapper">
+							<a class="waves-effect waves-light btn play-button">
+								<i class="mdi-av-play-arrow"></i>
+								Play 
+							</a>
+							<a class="waves-effect waves-light btn stop-button">
+								<i class="mdi-av-stop stop"></i>
+								Stop
+							</a>
+							<!--[TODO] Add Like button-->
+						</div>
+					</div>
+					<div class="pull-right .col-xs-6">
+						<!-- <div class="visual">
+							visualizer 2
+						</div> -->
+						<div class="button-wrapper">
+							<a class="waves-effect waves-light btn play-button">
+								<i class="mdi-av-play-arrow"></i>
+								Play
+							</a>
+							<a class="waves-effect waves-light btn stop-button">
+								<i class="mdi-av-stop"></i>
+								Stop
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="next">
+					<a class="waves-effect waves-light btn">
+						<i class="mdi-image-navigate-next"></i>
+						Next
+					</a>
+				</div>
+				<div class="test-box">
+					<a href="" class="waves-effect waves-light btn">Train neural network</a>
+				</div>
+			</div>
+			<div class="bottom-section">
+				<div class="container">
+					<p>
+						You can train the network at any point, but the more sound selections you give it, the better.
+					</p>
+				</div>
+			</div>
+		</div>
 		<script src="js/lib/jquery-2.1.1.js"></script>
+		<script src="js/lib/materialize.js"></script>
 		<script src="js/lib/brain-0.6.3.js"></script>
+		<script src="js/lib/three.min.js"></script>
 		<script src='js/audio.js'></script>
 		<script src='js/main.js'></script>
+		<script src='js/application.js'></script>
 	</body>
 </html>
