@@ -1,24 +1,12 @@
-<<<<<<< HEAD
-// Create AudioContext 
 window.audioContext = new AudioContext();
-=======
-// Create AudioContext
-var audioContext = new AudioContext();
->>>>>>> 4f840671bf68d3604d75a77279bb15fc824242f4
 
 /*
 	Creates echo
  */
 function createDelay() {
 	var node = audioContext.createScriptProcessor(256, 2, 2);
-<<<<<<< HEAD
 	var del = 250*(44100/1000);
-=======
-
-	var del = 250*(48000/1000);
-	// console.log(del);
-
->>>>>>> 4f840671bf68d3604d75a77279bb15fc824242f4
+	
 	var x = 0;
 	var lBuf = [];
 	var rBuf = [];
@@ -54,7 +42,6 @@ function createDelay() {
 		}
 	};
 	return node;
-<<<<<<< HEAD
 } 
 
 /*
@@ -63,8 +50,6 @@ function createDelay() {
 	3. triangle
 	4. sawtooth wave
  */
-=======
-}
 
 /**
  * [TODO]
@@ -84,18 +69,14 @@ var scales = [
 
 function generateMelody() {
 	var notesLead = [];
-
-<<<<<<< HEAD
 	var scale = scales[Math.floor(Math.random()*scales.length)];
 
 	scale.forEach(function(semi, i) {
 		var position = Math.floor(Math.random() * scale.length);
-		
-=======
+
 	major.forEach(function(semi, i) {
 		var position = Math.floor(Math.random() * major.length);
 
->>>>>>> 4f840671bf68d3604d75a77279bb15fc824242f4
 		notesLead.push({
 			measure: Math.floor(position/16),
 			// Every 1/16 of node
@@ -125,7 +106,6 @@ for (var i = 0; i < noiseBuffer.length; i++) {
 }
 reverb.buffer = noiseBuffer;
 
-<<<<<<< HEAD
 function sinWave(x) {
 	return Math.sin(x);
 }
@@ -160,34 +140,6 @@ function leadSound() {
 
 
 delay.connect(audioContext.destination);
-=======
-// var lead = synthastico.createSynth(
-// 	audioContext, notesLead
-// );
-
-// lead.sound = function (note, time) {
-// 	var val =
-// 		440 * Math.pow(2, (note.tone - 36) / 12) * (time / 48000);
-
-// 	var amp = synthastico.ampFromADSR(
-// 		note.totalPlayed,
-
-// 			Maybe AI can determine what ideal oscillator is?
-
-// 		50*(48000 / 1000),
-// 		50*(48000 / 1000),
-// 		1,
-// 		1000*(48000 / 1000)
-// 	)
-
-// 	// return (val - Math.floor(val)) * amp;
-// 	return Math.sin(val)*amp;
-// }
-
-// lead.connect(delay);
-// // delay.connect(reverb);
-// delay.connect(audioContext.destination);
->>>>>>> 4f840671bf68d3604d75a77279bb15fc824242f4
 
 
 
