@@ -3,7 +3,7 @@ var lead;
     Stop the melody being played
  */
 $(".stop-button").click(function() {
-    test.disconnect();
+    lead.disconnect();
 });
 
 /*

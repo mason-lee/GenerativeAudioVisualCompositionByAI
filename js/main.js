@@ -5,7 +5,7 @@ window.audioContext = new AudioContext();
  */
 function createDelay() {
 	var node = audioContext.createScriptProcessor(256, 2, 2);
-	var del = 250*(44100/1000);
+	var del = 250*(48000/1000);
 
 	var x = 0;
 	var lBuf = [];
@@ -121,16 +121,16 @@ function leadSound() {
 	var wave = waves[random];
 	return function (note, time) {
 		var val =
-			440 * Math.pow(2, (note.tone - 36) / 12) * (time / 44100);
+			440 * Math.pow(2, (note.tone - 36) / 12) * (time / 48000);
 		var amp = synthastico.ampFromADSR(
 			note.totalPlayed,
 			/*
 				Maybe AI can determine what ideal oscillator is?
 			 */
-			50*(44100 / 1000),
-			50*(44100 / 1000),
+			50*(48000 / 1000),
+			50*(48000 / 1000),
 			1,
-			1000*(44100 / 1000)
+			1000*(48000 / 1000)
 		);
 		// return (val - Math.floor(val)) * amp;
 		return wave(val)*amp;
