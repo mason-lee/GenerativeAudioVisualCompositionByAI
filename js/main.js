@@ -1,21 +1,11 @@
-// Create AudioContext
-var audioContext = new AudioContext();
+window.audioContext = new AudioContext();
 
 /*
 	Creates echo
  */
 function createDelay() {
-	// Create a ScriptProcessorNode with a bufferSize of 256
-	// and a double input and output channel.
-	// This value(256) controls how frequently the audioprocess event
-	// is dispatched and how many sample-frames need to be processed each call.
-	/*
-		Q1. Why double? What does it mean?
-	 */
 	var node = audioContext.createScriptProcessor(256, 2, 2);
-
-	var del = 250*(48000/1000);
-	// console.log(del);
+	var del = 250*(44100/1000);
 
 	var x = 0;
 	var lBuf = [];
@@ -40,12 +30,6 @@ function createDelay() {
 
 				l = l + lBufVal*0.6;
 				r = r + rBufVal*0.6;
-
-					// if (x > del && x < del + 256) { console.log('Weird'); }
-				// if (isNaN(l) && isNaN(r)) {
-				//   l = lOld;
-				//   r = rOld;
-				// }
 			}
 
 			lBuf.push(l);
@@ -57,9 +41,15 @@ function createDelay() {
 			x++;
 		}
 	};
-
 	return node;
 }
+
+/*
+	1. square
+	2 . sine
+	3. triangle
+	4. sawtooth wave
+ */
 
 /**
  * [TODO]
@@ -67,9 +57,21 @@ function createDelay() {
  */
 var major = [ 0, 2, 4, 5, 7, 9, 11, 12 ];
 
+var scales = [
+	// major
+	[ 0, 2, 4, 5, 7, 9, 11, 12 ],
+	// minor
+	[ 0, 2, 3, 5, 7, 8, 10, 12 ],
+	// harmonic minor
+	[ 0, 2, 3, 5, 7, 8, 11, 12 ]
+];
 
 function generateMelody() {
 	var notesLead = [];
+	var scale = scales[Math.floor(Math.random()*scales.length)];
+
+	scale.forEach(function(semi, i) {
+		var position = Math.floor(Math.random() * scale.length);
 
 	major.forEach(function(semi, i) {
 		var position = Math.floor(Math.random() * major.length);
@@ -90,7 +92,7 @@ function generateMelody() {
 	return notesLead;
 }
 
-var notesLead = generateMelody();
+// var notesLead = generateMelody();
 var delay = createDelay();
 var reverb = audioContext.createConvolver();
 
@@ -103,32 +105,40 @@ for (var i = 0; i < noiseBuffer.length; i++) {
 }
 reverb.buffer = noiseBuffer;
 
-// var lead = synthastico.createSynth(
-// 	audioContext, notesLead
-// );
+function sinWave(x) {
+	return Math.sin(x);
+}
 
-// lead.sound = function (note, time) {
-// 	var val =
-// 		440 * Math.pow(2, (note.tone - 36) / 12) * (time / 48000);
+function sawToothWave(x) {
+	x /= 10;
+	return x - Math.floor(x);
+}
 
-// 	var amp = synthastico.ampFromADSR(
-// 		note.totalPlayed,
+var waves = [sinWave, sawToothWave];
 
-// 			Maybe AI can determine what ideal oscillator is?
+function leadSound() {
+	var random = Math.floor(Math.random() * waves.length);
+	var wave = waves[random];
+	return function (note, time) {
+		var val =
+			440 * Math.pow(2, (note.tone - 36) / 12) * (time / 44100);
+		var amp = synthastico.ampFromADSR(
+			note.totalPlayed,
+			/*
+				Maybe AI can determine what ideal oscillator is?
+			 */
+			50*(44100 / 1000),
+			50*(44100 / 1000),
+			1,
+			1000*(44100 / 1000)
+		);
+		// return (val - Math.floor(val)) * amp;
+		return wave(val)*amp;
+	}
+}
 
-// 		50*(48000 / 1000),
-// 		50*(48000 / 1000),
-// 		1,
-// 		1000*(48000 / 1000)
-// 	)
 
-// 	// return (val - Math.floor(val)) * amp;
-// 	return Math.sin(val)*amp;
-// }
-
-// lead.connect(delay);
-// // delay.connect(reverb);
-// delay.connect(audioContext.destination);
+delay.connect(audioContext.destination);
 
 
 
