@@ -10,35 +10,52 @@
 	</head>
 	<body>
 		<div class="wrapper">
-			<div class="container">
-				<div class="intro-box">
-					<h1>Generate a sound according to your taste</h1>
+			<nav class="navbar navbar-default navbar-static-top">
+				<div class="container">
+					<div class="navbar-header">
+						<a href="/" class="navbar-brand">
+							Generate a sound according to your taste
+						</a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li>
+								<!-- <a><span class="title">Generate a sound according to your taste</span></a> -->
+							</li>
+						</ul>
+					</div>
 				</div>
+			</nav>
+			<div class="container">
 				<div class="training-box clearfix"> 
 					<div class="question-number">
-						<span>Q</span>
+						Melody
 						<span class="q-number">1</span>
+						<span>
+							- Play the melody and select the one you prefer.
+						</span>
 					</div>
 					<div class="button-wrapper">
-						<span class="glyphicon glyphicon-play play-icon"></span>
-						<span class="glyphicon-class play-icon">Play</span>
+						<span class="icon-wrapper btn btn-success">
+							<span class="glyphicon glyphicon-play play-icon"></span>
+							<span class="glyphicon-class play-icon">Play</span>
+						</span>
 					</div>
 					<div class="choose">
-						<h3>Which melody do you prefer?</h3>
+						<h5>Q. Which melody do you prefer?</h5>
 						<div class="checkbox">
 							<label>
-								<input type="checkbox" name="1">1
-							</label>
+								<input type="checkbox" name="1">1st Melody
+							</label><br>
 							<label>
-								<input type="checkbox" name="2">2
+								<input type="checkbox" name="2">2nd Melody
 							</label>
 						</div>
 					</div>
-				</div>
-				<div class="next">
-					<a class="btn btn-primary next-button">
+					<span class="next-button pull-right btn">
 						Next
-					</a>
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</span>
 				</div>
 				<!-- <div class="test-box">
 					<a href="" class="waves-effect waves-light btn">Train neural network</a>

@@ -40,6 +40,12 @@ $(function() {
 			qNum++;
 			$(".q-number").empty();
 			$(".q-number").append(qNum);
+			$(".choose input[type='checkbox']").removeAttr("checked");
+		}
+		else {
+			var errorMsg = $("<span class='bg-danger select-message'>Please select at least one melody.</span>");
+			errorMsg.appendTo(".training-box").hide().fadeIn(500);
+			$(".select-message").delay(2000).fadeOut(500);
 		}
 	});
 	

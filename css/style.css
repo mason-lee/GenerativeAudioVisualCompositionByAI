@@ -9,13 +9,13 @@
 	padding-bottom: 5em;
 }
 
-.intro-box {
-	text-align: center;
-	padding-top: 7em;
-}
-
 .training-box {
+	width: 600px;
+	margin: 0 auto;
 	padding: 2em;
+	border: 1px solid #b3b1b0;
+	margin-top: 50px;
+	margin-bottom: 20px;
 }
 
 .visual {
@@ -26,27 +26,40 @@
 }
 
 .test-box {
-	text-align: center;
 	padding: 2em 0;
 }
 
 .button-wrapper {
-	text-align: center;
 	padding: 1em 0;
 }
 
-.next {
-	text-align: center;
+.next-button{
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #202020;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
+.next-button:hover {
+	color: #202020;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.select-message {
+	padding: 10px 15px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
 }
 
 .bottom-section {
 	text-align: center;
 }
 
-.choose {
-	text-align: center;
-}
 
-.question-number {
-	text-align: center;
-}
+
+
