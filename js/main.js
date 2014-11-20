@@ -56,7 +56,6 @@ function createDelay() {
  *  Define different types of scale like A minor, C sharp something.....
  */
 var major = [ 0, 2, 4, 5, 7, 9, 11, 12 ];
->>>>>>> 4f840671bf68d3604d75a77279bb15fc824242f4
 
 var scales = [
 	// major
@@ -65,6 +64,7 @@ var scales = [
 	[ 0, 2, 3, 5, 7, 8, 10, 12 ],
 	// harmonic minor
 	[ 0, 2, 3, 5, 7, 8, 11, 12 ]
+
 ];
 
 function generateMelody() {
@@ -73,10 +73,7 @@ function generateMelody() {
 
 	scale.forEach(function(semi, i) {
 		var position = Math.floor(Math.random() * scale.length);
-
-	major.forEach(function(semi, i) {
-		var position = Math.floor(Math.random() * major.length);
-
+		
 		notesLead.push({
 			measure: Math.floor(position/16),
 			// Every 1/16 of node
@@ -93,12 +90,13 @@ function generateMelody() {
 	return notesLead;
 }
 
+
 // var notesLead = generateMelody();
 var delay = createDelay();
 var reverb = audioContext.createConvolver();
 
 // Create buffer source
-var noiseBuffer = audioContext.createBuffer(2, 48000/2, 48000);
+var noiseBuffer = audioContext.createBuffer(2, 44100/2, 44100);
 var left = noiseBuffer.getChannelData(0);
 var right = noiseBuffer.getChannelData(1);
 for (var i = 0; i < noiseBuffer.length; i++) {
@@ -137,7 +135,6 @@ function leadSound() {
 		return wave(val)*amp;
 	}
 }
-
 
 delay.connect(audioContext.destination);
 
