@@ -19,7 +19,7 @@ $(function() {
 	$(document).on('click', ".stop-icon", function() {
 		play = false;
 		if(!play) {
-			// delay.disconnect();
+			lead.disconnect();
 			// delay.disconnect(audioContext.destination);
 		  	$(this).parent().append("<span class='glyphicon glyphicon-play play-icon'></span><span class='glyphicon-class play-icon'>Play</span>");
 		  	$(".stop-icon").remove();
