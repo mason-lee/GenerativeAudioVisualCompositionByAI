@@ -1,8 +1,6 @@
 window.audioContext = new AudioContext();
 
-/*
-	Creates echo
- */
+//	Creates echo
 function createDelay() {
 	var node = audioContext.createScriptProcessor(256, 2, 2);
 	var del = 250*(44100/1000);
@@ -44,13 +42,6 @@ function createDelay() {
 	return node;
 } 
 
-/*
-	1. square
-	2 . sine
-	3. triangle
-	4. sawtooth wave
- */
-
 /**
  * [TODO]
  *  Define different types of scale like A minor, C sharp something.....
@@ -67,10 +58,23 @@ var scales = [
 
 ];
 
-function generateMelody() {
-	var notesLead = [];
-	var scale = scales[Math.floor(Math.random()*scales.length)];
+function pickScaleIndex() {
+	return Math.floor(Math.random()*scales.length);
+}
 
+function pickSynthParameters() {
+	return {
+		a: Math.floor(200 * Math.random()),
+		d: Math.floor(200 * Math.random()),
+		s: Math.random(), // You figure out what to do here. Hint: the randomly generated value must be between 0 and 1.
+		r: Math.floor(1000 * Math.random()), // You figure out what to do here. Hint: you want a value that is between 0 and 1000
+		oscillatorIndex: Math.floor(Math.random() * scales.length) // You figure out what to do here. Hint: you want to clamp this value between 0 and the length of all possible oscillators
+	}
+}
+
+function generateMelody(scaleIndex) {
+	var notesLead = [];
+	var scale = scales[scaleIndex];
 	scale.forEach(function(semi, i) {
 		var position = Math.floor(Math.random() * scale.length);
 		
@@ -90,13 +94,11 @@ function generateMelody() {
 	return notesLead;
 }
 
-
-// var notesLead = generateMelody();
 var delay = createDelay();
 var reverb = audioContext.createConvolver();
 
 // Create buffer source
-var noiseBuffer = audioContext.createBuffer(2, 44100/2, 44100);
+var noiseBuffer = audioContext.createBuffer(2, audioContext.sampleRate/2, audioContext.sampleRate);
 var left = noiseBuffer.getChannelData(0);
 var right = noiseBuffer.getChannelData(1);
 for (var i = 0; i < noiseBuffer.length; i++) {
@@ -113,25 +115,36 @@ function sawToothWave(x) {
 	return x - Math.floor(x);
 }
 
-var waves = [sinWave, sawToothWave];
+function triangleWave(x) {
+	// TODO: implement the triangle periodic function.
+	// return m (x − x1) + y1
+}
 
-function leadSound() {
+function squareWave(x) {
+	// TODO: implement the square periodic function.
+}
+
+var waves = [
+	sinWave,
+	sawToothWave,
+	triangleWave,
+	squareWave
+];
+
+function leadSound(a, d, s, r, oscillatorIndex) {
 	var random = Math.floor(Math.random() * waves.length);
-	var wave = waves[random];
+	var wave = waves[oscillatorIndex];
 	return function (note, time) {
 		var val =
 			440 * Math.pow(2, (note.tone - 36) / 12) * (time / 44100);
 		var amp = synthastico.ampFromADSR(
 			note.totalPlayed,
-			/*
-				Maybe AI can determine what ideal oscillator is?
-			 */
-			50*(44100 / 1000),
-			50*(44100 / 1000),
-			1,
-			1000*(44100 / 1000)
+			//Maybe AI can determine what ideal oscillator is
+			a*(audioContext.sampleRate / 1000),
+			d*(audioContext.sampleRate / 1000),
+			s,
+			r*(audioContext.sampleRate / 1000)
 		);
-		// return (val - Math.floor(val)) * amp;
 		return wave(val)*amp;
 	}
 }

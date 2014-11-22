@@ -5,10 +5,12 @@ $(function() {
 	$(document).on('click', ".play-icon", function() {
 		play = true;
 		if(play) {
-			var notesLead = generateMelody();
+			var scaleIndex = pickScaleIndex();
+			var synthParams = pickSynthParameters();
+			var notesLead = generateMelody(scaleIndex);
 		      // AudioContext and List of nodes
 		      lead = synthastico.createSynth(audioContext, notesLead);
-		      lead.sound = leadSound();
+		      lead.sound = leadSound(synthParams.a, synthParams.d, synthParams.s, synthParams.r, synthParams.oscillatorIndex);
 		      lead.connect(audioContext.destination);
 
 			$(this).parent().append("<span class='glyphicon glyphicon-stop stop-icon'></span><span class='glyphicon-class stop-icon'>Stop</span>");

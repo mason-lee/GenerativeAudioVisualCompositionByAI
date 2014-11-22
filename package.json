@@ -1,0 +1,26 @@
+{
+	"name": "GenerativeMusic",
+	"description": "Using neural network library to generate music",
+	"version": "0.1.0",
+	"author": "Mason Lee <mideuml@sfu.ca> & Jeremy Fung",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mason-lee/GenerativeAudioVisualCompositionByAI"
+	},
+	"scripts": {
+
+	},
+	"main": {
+
+	},
+	"dependencies": {
+	    "express": "~4.9.x"
+	},
+	"dependencies": {
+
+	},
+	"engines": {
+	     "node": "0.10.x"
+	},
+	"keywords": ["neural network", "machine learning", "IAT455"]
+}
