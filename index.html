@@ -5,53 +5,57 @@
 		<meta charset='utf-8'>
 		<title>AI - Generative Music and Visualizer</title>
 		<link rel="stylesheet" href="css/bootstrap.css">
-		<link rel="stylesheet" href="css/materialize.css">
+		<link rel="stylesheet" href="css/bootstrap-theme.css">
 		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
 		<div class="wrapper">
+			<nav class="navbar navbar-default navbar-static-top">
+				<div class="container">
+					<div class="navbar-header">
+						<a href="/" class="navbar-brand">
+							Generate a sound according to your taste
+						</a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li>
+								<!-- <a><span class="title">Generate a sound according to your taste</span></a> -->
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
 			<div class="container">
-				<div class="intro-box">
-					<h5>Generate a sound according to your taste</h5>
-				</div>
-				<div class="training-box clearfix"> 
-					<div class="pull-left col-xs-6">
-						<!-- <div class="visual">
-							visualizer 1
-						</div> -->
-						<div class="button-wrapper">
-							<a class="waves-effect waves-light btn play-button">
-								<i class="mdi-av-play-arrow"></i>
-								Play 
-							</a>
-							<a class="waves-effect waves-light btn stop-button">
-								<i class="mdi-av-stop stop"></i>
-								Stop
-							</a>
-							<!--[TODO] Add Like button-->
+				<div class="training-box clearfix">
+					<div class="question-number">
+						Melody
+						<span class="q-number">1</span>
+						<span>
+							- Play the melody and select the one you prefer.
+						</span>
+					</div>
+					<div class="button-wrapper">
+						<span class="icon-wrapper btn btn-success">
+							<span class="glyphicon glyphicon-play play-icon"></span>
+							<span class="glyphicon-class play-icon">Play</span>
+						</span>
+					</div>
+					<div class="choose">
+						<h5>Q. Do you like this melody? </h5>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="1">yes
+							</label><br>
+							<label>
+								<input type="checkbox" name="2">no
+							</label>
 						</div>
 					</div>
-					<div class="pull-right .col-xs-6">
-						<!-- <div class="visual">
-							visualizer 2
-						</div> -->
-						<div class="button-wrapper">
-							<a class="waves-effect waves-light btn play-button">
-								<i class="mdi-av-play-arrow"></i>
-								Play
-							</a>
-							<a class="waves-effect waves-light btn stop-button">
-								<i class="mdi-av-stop"></i>
-								Stop
-							</a>
-						</div>
-					</div>
-				</div>
-				<div class="next">
-					<a class="waves-effect waves-light btn">
-						<i class="mdi-image-navigate-next"></i>
-						Next
-					</a>
+					<span class="next-button pull-right btn">
+						Next Melody
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</span>
 				</div>
 				<div class="test-box">
 					<a href="" class="waves-effect waves-light btn">Train neural network</a>
@@ -66,11 +70,10 @@
 			</div>
 		</div>
 		<script src="js/lib/jquery-2.1.1.js"></script>
-		<script src="js/lib/materialize.js"></script>
-		<script src="js/lib/brain-0.6.3.js"></script>
-		<script src="js/lib/three.min.js"></script>
+		<script src="js/lib/brain.js"></script>
 		<script src='js/audio.js'></script>
 		<script src='js/main.js'></script>
 		<script src='js/application.js'></script>
+		<script src='js/neural.js'></script>
 	</body>
 </html>
