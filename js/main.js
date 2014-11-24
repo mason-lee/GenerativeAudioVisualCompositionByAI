@@ -154,6 +154,104 @@ function leadSound(a, d, s, r, oscillatorIndex) {
 
 delay.connect(audioContext.destination);
 
+/**
+ * [what was application.js]
+ */
+var lead;
+var play = false;
+var melody;
+
+function createParameters() {
+	var scaleIndex = pickScaleIndex();
+	var synthParams = pickSynthParameters();
+	return {
+		scaleIndex: scaleIndex,
+		a: synthParams.a,
+		d: synthParams.d,
+		s: synthParams.s,
+		r: synthParams.r,
+		oscillatorIndex: synthParams.oscillatorIndex 
+	}
+}
+
+$(document).on('click', ".play-icon-wrapper", function() {
+	play = true;
+	if(play) {
+		var notesLead = generateMelody(createParameters().scaleIndex);
+	      // AudioContext and List of nodes
+	      lead = synthastico.createSynth(audioContext, notesLead);
+	      lead.sosdund = leadSound(createParameters().a, createParameters().d, createParameters().s, createParameters().r, createParameters().oscillatorIndex);
+	      lead.connect(audioContext.destination);
+	      $(".icon-wrapper").removeClass("play-icon-wrapper").addClass("stop-icon-wrapper");
+		$(".play-icon").remove();
+		$(".icon-wrapper").append("<span class='glyphicon glyphicon-stop stop-icon'></span><span class='glyphicon-class stop-icon'>Stop</span>");
+		// Store input values to the melody variable which will be stored to localStorage later
+		melody = createParameters();
+	}
+});
+
+
+$(document).on('click', ".stop-icon-wrapper", function() {
+	play = false;
+	if(!play) {
+		lead.disconnect();
+		$(this).removeClass("stop-icon-wrapper").addClass("play-icon-wrapper");
+	  	$(".icon-wrapper").append("<span class='glyphicon glyphicon-play play-icon'></span><span class='glyphicon-class play-icon'>Play</span>");
+	  	$(".stop-icon").remove();
+	}
+});
+
+var melodySelection = undefined;
+
+// Allow only one click and able next button only when a checkbox is clicked.
+$(".next-button").addClass("inactive");
+$('.choose input[type="checkbox"]').on('change', function() {
+	$('input[type="checkbox"]').not(this).prop('checked', false);
+
+	if(this.checked) {
+      	$(".next-button").removeClass("inactive");
+      	if($(this).prop('value') == "yes") {
+			// Store oupt values to the melodySelection variable which will be stored to localStorage as an ouput later
+			melodySelection = 1;
+      	}
+      	else if ($(this).prop('value') == "no") {
+			// Store oupt values to the melodySelection variable which will be stored to localStorage as an ouput later
+			melodySelection = 0;
+      	}
+	}
+	else {
+		$(".next-button").addClass("inactive");
+	}
+});
+
+// Dynamically add question number
+$(".next-button").click(function() {
+	// Only when checkbox is checked
+	if($(".choose input[type='checkbox']").is(':checked')) {
+		var qNum = parseInt($(".q-number").html());
+		qNum++;
+		$(".q-number").empty();
+		$(".q-number").append(qNum);
+		$(".choose input[type='checkbox']").removeAttr("checked");
+		// $(".icon-wrapper").removeClass("inactive");
+		// save the melody and outuput to the localStorage
+		store.set('melodyLibrary', { input: melody, ouput: melodySelection });
+	}
+	else {
+		var errorMsg = $("<span class='bg-danger select-message'>Please select at least one melody.</span>");
+		errorMsg.appendTo(".training-box").hide().fadeIn(500);
+		$(".select-message").delay(2000).fadeOut(500);
+	}
+});
+
+/**
+ * Brain JS Thingy....
+ */
+$(".test-box").hide();
+var net = new brain.NeuralNetwork();
+// net.train(this.data, {
+// 	iterations: 9000
+// });
 
 
 

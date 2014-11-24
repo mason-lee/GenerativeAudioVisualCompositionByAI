@@ -36,19 +36,22 @@
 						</span>
 					</div>
 					<div class="button-wrapper">
-						<span class="icon-wrapper btn btn-success">
+						<span class="icon-wrapper btn btn-success play-icon-wrapper">
 							<span class="glyphicon glyphicon-play play-icon"></span>
 							<span class="glyphicon-class play-icon">Play</span>
 						</span>
+						<!-- <span class="replay btn btn-info">
+							Replay
+						</span> -->
 					</div>
 					<div class="choose">
-						<h5>Q. Which melody do you prefer?</h5>
+						<h5>Q. Do you like this melody?</h5>
 						<div class="checkbox">
 							<label>
-								<input type="checkbox" name="1">1st Melody
+								<input type="checkbox" name="selection" value="yes">Yes
 							</label><br>
 							<label>
-								<input type="checkbox" name="2">2nd Melody
+								<input type="checkbox" name="selection" value="no">No
 							</label>
 						</div>
 					</div>
@@ -71,9 +74,8 @@
 		</div>
 		<script src="js/lib/jquery-2.1.1.js"></script>
 		<script src="js/lib/brain.js"></script>
+		<script src="js/lib/store.js"></script>
 		<script src='js/audio.js'></script>
 		<script src='js/main.js'></script>
-		<script src='js/application.js'></script>
-		<script src='js/neural.js'></script>
 	</body>
 </html>
