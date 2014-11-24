@@ -60,6 +60,10 @@
 	text-align: center;
 }
 
+.inactive {
+	opacity: 0.5;
+	pointer-events: none;
+}
 
 
 

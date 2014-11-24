@@ -34,6 +34,18 @@ $(function() {
 		$('input[type="checkbox"]').not(this).prop('checked', false);
 	});
 
+	// Only allow play melody twice
+	$(".next-button").addClass("inactive");
+	var playTimes = 4;
+
+	$(".icon-wrapper").click(function() {
+		playTimes--;
+		if (playTimes == 0) {
+			$(".next-button").removeClass("inactive");
+			$(".icon-wrapper").addClass("inactive");
+		}
+	});
+
 	// Dynamically add question number
 	$(".next-button").click(function() {
 		// Only when checkbox is checked
@@ -43,6 +55,8 @@ $(function() {
 			$(".q-number").empty();
 			$(".q-number").append(qNum);
 			$(".choose input[type='checkbox']").removeAttr("checked");
+			playTimes = 4;
+			$(".icon-wrapper").removeClass("inactive");
 		}
 		else {
 			var errorMsg = $("<span class='bg-danger select-message'>Please select at least one melody.</span>");

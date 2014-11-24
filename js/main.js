@@ -42,20 +42,25 @@ function createDelay() {
 	return node;
 } 
 
-/**
- * [TODO]
- *  Define different types of scale like A minor, C sharp something.....
- */
-var major = [ 0, 2, 4, 5, 7, 9, 11, 12 ];
-
 var scales = [
 	// major
 	[ 0, 2, 4, 5, 7, 9, 11, 12 ],
 	// minor
 	[ 0, 2, 3, 5, 7, 8, 10, 12 ],
 	// harmonic minor
-	[ 0, 2, 3, 5, 7, 8, 11, 12 ]
-
+	[ 0, 2, 3, 5, 7, 8, 11, 12 ],
+	// harmonic major
+	[ 0, 1, 4, 5, 7, 9, 11, 12 ],
+	// blues scale
+	[ 0, 3, 5, 6, 7, 10, 12 ],
+	// lydian augmented scales
+	[ 0, 2, 4, 6, 8, 9, 11, 12 ],
+	// neapolitan major scale
+	[ 0, 1, 3, 5, 7, 9, 11, 12 ],
+	// neapolitan minor scale
+	[ 0, 1, 3, 5, 7, 8, 11, 12 ],
+	// major locrian scale
+	[ 0, 2, 4, 5, 6, 8, 10, 12 ]
 ];
 
 function pickScaleIndex() {
@@ -66,9 +71,9 @@ function pickSynthParameters() {
 	return {
 		a: Math.floor(200 * Math.random()),
 		d: Math.floor(200 * Math.random()),
-		s: Math.random(), // You figure out what to do here. Hint: the randomly generated value must be between 0 and 1.
-		r: Math.floor(1000 * Math.random()), // You figure out what to do here. Hint: you want a value that is between 0 and 1000
-		oscillatorIndex: Math.floor(Math.random() * scales.length) // You figure out what to do here. Hint: you want to clamp this value between 0 and the length of all possible oscillators
+		s: Math.random(), 
+		r: Math.floor(1000 * Math.random()), 
+		oscillatorIndex: Math.floor(Math.random() * waves.length) 
 	}
 }
 
@@ -116,12 +121,11 @@ function sawToothWave(x) {
 }
 
 function triangleWave(x) {
-	// TODO: implement the triangle periodic function.
-	// return m (x − x1) + y1
+	return (Math.abs(( x % 6 ) - 3 ) - 1.5) / 1.5;
 }
 
 function squareWave(x) {
-	// TODO: implement the square periodic function.
+	return ( x % 6 ) < 3 ? 1 : -1;
 }
 
 var waves = [
@@ -139,7 +143,6 @@ function leadSound(a, d, s, r, oscillatorIndex) {
 			440 * Math.pow(2, (note.tone - 36) / 12) * (time / 44100);
 		var amp = synthastico.ampFromADSR(
 			note.totalPlayed,
-			//Maybe AI can determine what ideal oscillator is
 			a*(audioContext.sampleRate / 1000),
 			d*(audioContext.sampleRate / 1000),
 			s,
