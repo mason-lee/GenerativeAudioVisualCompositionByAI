@@ -27,7 +27,7 @@
 				</div>
 			</nav>
 			<div class="container">
-				<div class="training-box clearfix"> 
+				<div class="training-box clearfix">
 					<div class="question-number">
 						Melody
 						<span class="q-number">1</span>
@@ -55,8 +55,12 @@
 							</label>
 						</div>
 					</div>
-					<span class="next-button pull-right btn">
+					<span class="next-button pull-left btn">
 						Next
+						<i class="glyphicon glyphicon-chevron-right"></i>
+					</span>
+					<span class="show-json-button pull-right btn">
+						show values
 						<i class="glyphicon glyphicon-chevron-right"></i>
 					</span>
 				</div>
@@ -70,11 +74,20 @@
 						You can train the network at any point, but the more sound selections you give it, the better.
 					</p>
 				</div>
+				<div>
+					<pre>
+					<code>
+						<div id="show-json">
+						</div>
+					</code>
+					</pre>
+				</div>
 			</div>
 		</div>
 		<script src="js/lib/jquery-2.1.1.js"></script>
 		<script src="js/lib/brain.js"></script>
 		<script src="js/lib/store.js"></script>
+		<script src="js/store-test.js"></script>
 		<script src='js/audio.js'></script>
 		<script src='js/main.js'></script>
 	</body>

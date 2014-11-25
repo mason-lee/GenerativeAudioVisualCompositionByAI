@@ -4,7 +4,7 @@ window.audioContext = new AudioContext();
 function createDelay() {
 	var node = audioContext.createScriptProcessor(256, 2, 2);
 	var del = 250*(44100/1000);
-	
+
 	var x = 0;
 	var lBuf = [];
 	var rBuf = [];
@@ -40,7 +40,7 @@ function createDelay() {
 		}
 	};
 	return node;
-} 
+}
 
 var scales = [
 	// major
@@ -71,9 +71,9 @@ function pickSynthParameters() {
 	return {
 		a: Math.floor(200 * Math.random()),
 		d: Math.floor(200 * Math.random()),
-		s: Math.random(), 
-		r: Math.floor(1000 * Math.random()), 
-		oscillatorIndex: Math.floor(Math.random() * waves.length) 
+		s: Math.random(),
+		r: Math.floor(1000 * Math.random()),
+		oscillatorIndex: Math.floor(Math.random() * waves.length)
 	}
 }
 
@@ -82,7 +82,7 @@ function generateMelody(scaleIndex) {
 	var scale = scales[scaleIndex];
 	scale.forEach(function(semi, i) {
 		var position = Math.floor(Math.random() * scale.length);
-		
+
 		notesLead.push({
 			measure: Math.floor(position/16),
 			// Every 1/16 of node
@@ -170,7 +170,7 @@ function createParameters() {
 		d: synthParams.d,
 		s: synthParams.s,
 		r: synthParams.r,
-		oscillatorIndex: synthParams.oscillatorIndex 
+		oscillatorIndex: synthParams.oscillatorIndex
 	}
 }
 
@@ -205,6 +205,7 @@ var melodySelection = undefined;
 
 // Allow only one click and able next button only when a checkbox is clicked.
 $(".next-button").addClass("inactive");
+$(".show-json-button").addClass("inactive");
 $('.choose input[type="checkbox"]').on('change', function() {
 	$('input[type="checkbox"]').not(this).prop('checked', false);
 
@@ -236,12 +237,19 @@ $(".next-button").click(function() {
 		// $(".icon-wrapper").removeClass("inactive");
 		// save the melody and outuput to the localStorage
 		store.set('melodyLibrary', { input: melody, ouput: melodySelection });
+		$(".show-json-button").removeClass("inactive");
 	}
 	else {
 		var errorMsg = $("<span class='bg-danger select-message'>Please select at least one melody.</span>");
 		errorMsg.appendTo(".training-box").hide().fadeIn(500);
 		$(".select-message").delay(2000).fadeOut(500);
+		$(".show-json-button").addClass("inactive");
 	}
+});
+
+$(".show-json-button").click(function(){
+	var showText = store.get('melodyLibrary');
+	document.getElementById("show-json").innerHTML=  JSON.stringify(showText);
 });
 
 /**
