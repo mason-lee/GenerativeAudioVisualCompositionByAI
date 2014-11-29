@@ -67,17 +67,14 @@ var scales = [
 	[ 0, 2, 4, 5, 6, 8, 10, 12 ]
 ];
 
-function pickScaleIndex() {
-	return Math.floor(Math.random()*scales.length);
-}
-
 function pickSynthParameters() {
 	return {
-		a: Math.floor(A * Math.random()),
-		d: Math.floor(D * Math.random()),
+		scaleIndex: Math.random(),
+		a: Math.random(),
+		d: Math.random(),
 		s: Math.random(), 
-		r: Math.floor(R * Math.random()), 
-		oscillatorIndex: Math.floor(Math.random() * OSCILLATORINDEX) 
+		r: Math.random(), 
+		oscillatorIndex: Math.random() 
 	}
 }
 
@@ -160,41 +157,35 @@ delay.connect(audioContext.destination);
 /*********************** Application Script *********************************/
 var lead;
 var play = false;
-var melody;
+var synth;
 
-function createParameters() {
-	var scaleIndex = pickScaleIndex();
-	var synthParams = pickSynthParameters();
+function createParameters(synthParams) {
+
 	return {
-		scaleIndex: scaleIndex,
-		a: synthParams.a,
-		d: synthParams.d,
+		scaleIndex: Math.floor(synthParams.scaleIndex * scales.length),
+		a: Math.floor(synthParams.a * A),
+		d: Math.floor(synthParams.d * D),
 		s: synthParams.s,
-		r: synthParams.r,
-		oscillatorIndex: synthParams.oscillatorIndex 
+		r: Math.floor(synthParams.r * R),
+		oscillatorIndex: Math.floor(synthParams.oscillatorIndex * waves.length)
 	}
 }
 
 $(document).on('click', ".play-icon-wrapper", function() {
 	play = true;
 	if(play) {
-		var notesLead = generateMelody(createParameters().scaleIndex);
+		var params = pickSynthParameters();
+		var synthParams = createParameters(params);
+		var notesLead = generateMelody(synthParams.scaleIndex);
 	      // AudioContext and List of nodes
 	      lead = synthastico.createSynth(audioContext, notesLead);
-	      lead.sosdund = leadSound(createParameters().a, createParameters().d, createParameters().s, createParameters().r, createParameters().oscillatorIndex);
+	      lead.sound = leadSound(synthParams.a, synthParams.d, synthParams.s, synthParams.r, synthParams.oscillatorIndex);
 	      lead.connect(audioContext.destination);
 	      $(".stop-icon-wrapper").prop("disabled", false);
 	      $(this).prop("disabled", true);
 	      play = false;
 		// Store input values to the melody variable which will be stored to localStorage later
-		melody = createParameters();
-		console.log(melody);
-		var _a = melody.a / A,
-			_d = melody.d / D,
-			_r = melody.r/ R,
-			_scaleIndex = melody.scaleIndex / SCALEINDEX,
-			_oscillatorIndex = melody.oscillatorIndex / OSCILLATORINDEX;
-
+		synth = params;
 	}
 });
 
@@ -215,12 +206,12 @@ $('.choose input[type="checkbox"]').on('change', function() {
       	if($(this).prop('value') == "yes") {
 			// Store oupt values to the melodySelection variable
 			// which will be stored to localStorage as an ouput later
-			melodySelection = 1;
+			melodySelection = {like : 1};
       	}
       	else if ($(this).prop('value') == "no") {
 			// Store oupt values to the melodySelection variable 
 			// which will be stored to localStorage as an ouput later
-			melodySelection = 0;
+			melodySelection = {dislike: 1};
       	}
 	}
 	else {
@@ -232,9 +223,7 @@ var qNum = parseInt($(".q-number").html());
 var library = store.get('melodyLibrary');
 if(!library) { library = []; }
 
-// $(".test-box").hide();
-
-
+$(".test-box").hide();
 // Dynamically add question number
 $(".next-button").click(function() {
 	// Only when checkbox is checked
@@ -250,9 +239,18 @@ $(".next-button").click(function() {
 		// Stop the current melody
 		lead.disconnect();
 		$(".play-icon-wrapper").prop("disabled", false);
+		
+
 		// save the melody and outuput to the localStorage
-		library.push({ input: melody, ouput: melodySelection });
+		var data = { input: synth, output: melodySelection };
+		// console.log(data);
+		library.push(data);
 		store.set('melodyLibrary', library);
+		// console.log(library);
+		/**
+		 * Brain JS Thingy....
+		 */
+		
 	}
 	else {
 		var errorMsg = $("<span class='bg-danger select-message'>Please select at least one melody.</span>");
@@ -261,19 +259,19 @@ $(".next-button").click(function() {
 	}
 });
 
-/**
- * Brain JS Thingy....
+
+/*
+	Plug this into jukebox
  */
-var net = new brain.NeuralNetwork();
-net.train(library, {
-	errorThresh: 0.005,  // error threshold to reach
-	iterations: 20000,   // maximum training iterations
-	log: true,           // console.log() progress periodically
-	logPeriod: 10,       // number of iterations between logging
-	learningRate: 0.3    // learning rate
-});
 
-
+// var net = new brain.NeuralNetwork();
+		// net.train(library, {
+		// 	errorThresh: 0.005,  // error threshold to reach
+		// 	iterations: 20000,   // maximum training iterations
+		// 	log: true,           // console.log() progress periodically
+		// 	logPeriod: 10,       // number of iterations between logging
+		// 	learningRate: 0.3    // learning rate
+		// });
 
 
 
