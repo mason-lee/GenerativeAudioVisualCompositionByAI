@@ -2,7 +2,7 @@
 	Override template stylings
  */
 .btn:hover {
-	color: #fff;
+/*	color: #fff;*/
 }
 
 .wrapper {
@@ -27,6 +27,7 @@
 
 .test-box {
 	padding: 2em 0;
+	text-align: center;
 }
 
 .button-wrapper {

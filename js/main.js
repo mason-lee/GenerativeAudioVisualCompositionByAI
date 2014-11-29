@@ -1,10 +1,14 @@
-window.audioContext = new AudioContext();
+var A = 200;
+var D = 200;
+var R = 1000;
+var SCALEINDEX = 9;
+var OSCILLATORINDEX = 4;
 
+window.audioContext = new AudioContext();
 //	Creates echo
 function createDelay() {
 	var node = audioContext.createScriptProcessor(256, 2, 2);
 	var del = 250*(44100/1000);
-	
 	var x = 0;
 	var lBuf = [];
 	var rBuf = [];
@@ -69,11 +73,11 @@ function pickScaleIndex() {
 
 function pickSynthParameters() {
 	return {
-		a: Math.floor(200 * Math.random()),
-		d: Math.floor(200 * Math.random()),
+		a: Math.floor(A * Math.random()),
+		d: Math.floor(D * Math.random()),
 		s: Math.random(), 
-		r: Math.floor(1000 * Math.random()), 
-		oscillatorIndex: Math.floor(Math.random() * waves.length) 
+		r: Math.floor(R * Math.random()), 
+		oscillatorIndex: Math.floor(Math.random() * OSCILLATORINDEX) 
 	}
 }
 
@@ -82,7 +86,6 @@ function generateMelody(scaleIndex) {
 	var scale = scales[scaleIndex];
 	scale.forEach(function(semi, i) {
 		var position = Math.floor(Math.random() * scale.length);
-		
 		notesLead.push({
 			measure: Math.floor(position/16),
 			// Every 1/16 of node
@@ -154,9 +157,7 @@ function leadSound(a, d, s, r, oscillatorIndex) {
 
 delay.connect(audioContext.destination);
 
-/**
- * [what was application.js]
- */
+/*********************** Application Script *********************************/
 var lead;
 var play = false;
 var melody;
@@ -182,40 +183,43 @@ $(document).on('click', ".play-icon-wrapper", function() {
 	      lead = synthastico.createSynth(audioContext, notesLead);
 	      lead.sosdund = leadSound(createParameters().a, createParameters().d, createParameters().s, createParameters().r, createParameters().oscillatorIndex);
 	      lead.connect(audioContext.destination);
-	      $(".icon-wrapper").removeClass("play-icon-wrapper").addClass("stop-icon-wrapper");
-		$(".play-icon").remove();
-		$(".icon-wrapper").append("<span class='glyphicon glyphicon-stop stop-icon'></span><span class='glyphicon-class stop-icon'>Stop</span>");
+	      $(".stop-icon-wrapper").prop("disabled", false);
+	      $(this).prop("disabled", true);
+	      play = false;
 		// Store input values to the melody variable which will be stored to localStorage later
 		melody = createParameters();
+		console.log(melody);
+		var _a = melody.a / A,
+			_d = melody.d / D,
+			_r = melody.r/ R,
+			_scaleIndex = melody.scaleIndex / SCALEINDEX,
+			_oscillatorIndex = melody.oscillatorIndex / OSCILLATORINDEX;
+
 	}
 });
-
 
 $(document).on('click', ".stop-icon-wrapper", function() {
 	play = false;
 	if(!play) {
 		lead.disconnect();
-		$(this).removeClass("stop-icon-wrapper").addClass("play-icon-wrapper");
-	  	$(".icon-wrapper").append("<span class='glyphicon glyphicon-play play-icon'></span><span class='glyphicon-class play-icon'>Play</span>");
-	  	$(".stop-icon").remove();
+		$(this).prop("disabled", true);
 	}
 });
 
 var melodySelection = undefined;
-
 // Allow only one click and able next button only when a checkbox is clicked.
-$(".next-button").addClass("inactive");
 $('.choose input[type="checkbox"]').on('change', function() {
 	$('input[type="checkbox"]').not(this).prop('checked', false);
-
 	if(this.checked) {
       	$(".next-button").removeClass("inactive");
       	if($(this).prop('value') == "yes") {
-			// Store oupt values to the melodySelection variable which will be stored to localStorage as an ouput later
+			// Store oupt values to the melodySelection variable
+			// which will be stored to localStorage as an ouput later
 			melodySelection = 1;
       	}
       	else if ($(this).prop('value') == "no") {
-			// Store oupt values to the melodySelection variable which will be stored to localStorage as an ouput later
+			// Store oupt values to the melodySelection variable 
+			// which will be stored to localStorage as an ouput later
 			melodySelection = 0;
       	}
 	}
@@ -224,18 +228,31 @@ $('.choose input[type="checkbox"]').on('change', function() {
 	}
 });
 
+var qNum = parseInt($(".q-number").html());
+var library = store.get('melodyLibrary');
+if(!library) { library = []; }
+
+// $(".test-box").hide();
+
+
 // Dynamically add question number
 $(".next-button").click(function() {
 	// Only when checkbox is checked
 	if($(".choose input[type='checkbox']").is(':checked')) {
-		var qNum = parseInt($(".q-number").html());
 		qNum++;
 		$(".q-number").empty();
 		$(".q-number").append(qNum);
+		if(qNum > 5) {
+			$(".test-box").show();
+		}
+		$(".next-button").addClass("inactive");
 		$(".choose input[type='checkbox']").removeAttr("checked");
-		// $(".icon-wrapper").removeClass("inactive");
+		// Stop the current melody
+		lead.disconnect();
+		$(".play-icon-wrapper").prop("disabled", false);
 		// save the melody and outuput to the localStorage
-		store.set('melodyLibrary', { input: melody, ouput: melodySelection });
+		library.push({ input: melody, ouput: melodySelection });
+		store.set('melodyLibrary', library);
 	}
 	else {
 		var errorMsg = $("<span class='bg-danger select-message'>Please select at least one melody.</span>");
@@ -247,11 +264,14 @@ $(".next-button").click(function() {
 /**
  * Brain JS Thingy....
  */
-$(".test-box").hide();
 var net = new brain.NeuralNetwork();
-// net.train(this.data, {
-// 	iterations: 9000
-// });
+net.train(library, {
+	errorThresh: 0.005,  // error threshold to reach
+	iterations: 20000,   // maximum training iterations
+	log: true,           // console.log() progress periodically
+	logPeriod: 10,       // number of iterations between logging
+	learningRate: 0.3    // learning rate
+});
 
 
 
