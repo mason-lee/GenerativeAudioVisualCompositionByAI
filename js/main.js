@@ -264,14 +264,14 @@ $(".next-button").click(function() {
 	Plug this into jukebox
  */
 
-// var net = new brain.NeuralNetwork();
-		// net.train(library, {
-		// 	errorThresh: 0.005,  // error threshold to reach
-		// 	iterations: 20000,   // maximum training iterations
-		// 	log: true,           // console.log() progress periodically
-		// 	logPeriod: 10,       // number of iterations between logging
-		// 	learningRate: 0.3    // learning rate
-		// });
+var net = new brain.NeuralNetwork();
+		net.train(library, {
+			errorThresh: 0.005,  // error threshold to reach
+			iterations: 20000,   // maximum training iterations
+			log: true,           // console.log() progress periodically
+			logPeriod: 10,       // number of iterations between logging
+			learningRate: 0.3    // learning rate
+		});
 
 
 
