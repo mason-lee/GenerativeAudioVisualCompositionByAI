@@ -160,7 +160,6 @@ var play = false;
 var synth;
 
 function createParameters(synthParams) {
-
 	return {
 		scaleIndex: Math.floor(synthParams.scaleIndex * scales.length),
 		a: Math.floor(synthParams.a * A),
@@ -236,21 +235,17 @@ $(".next-button").click(function() {
 		}
 		$(".next-button").addClass("inactive");
 		$(".choose input[type='checkbox']").removeAttr("checked");
+		
 		// Stop the current melody
 		lead.disconnect();
 		$(".play-icon-wrapper").prop("disabled", false);
-		
-
+		$(".stop-icon-wrapper").prop("disabled", false);
 		// save the melody and outuput to the localStorage
 		var data = { input: synth, output: melodySelection };
 		// console.log(data);
 		library.push(data);
 		store.set('melodyLibrary', library);
 		// console.log(library);
-		/**
-		 * Brain JS Thingy....
-		 */
-		
 	}
 	else {
 		var errorMsg = $("<span class='bg-danger select-message'>Please select at least one melody.</span>");
@@ -259,19 +254,59 @@ $(".next-button").click(function() {
 	}
 });
 
+/**
+ * [TODO 0] Create another page that appears when user clicks "Train Neural Network" button -- "UI"
+ */ 
 
-/*
-	Plug this into jukebox
+
+/**
+ * [TODO 1] Get data from "synths.json" file
  */
 
-var net = new brain.NeuralNetwork();
-		net.train(library, {
-			errorThresh: 0.005,  // error threshold to reach
-			iterations: 20000,   // maximum training iterations
-			log: true,           // console.log() progress periodically
-			logPeriod: 10,       // number of iterations between logging
-			learningRate: 0.3    // learning rate
-		});
+
+
+/**
+ * [TODO 2] Plug the data to the Neural Network
+ */
+
+// var net = new brain.NeuralNetwork();
+// net.train(our data in a json file, {
+// 	errorThresh: 0.005,  // error threshold to reach
+// 	iterations: 20000,   // maximum training iterations
+// 	log: true,           // console.log() progress periodically
+// 	logPeriod: 10,       // number of iterations between logging
+// 	learningRate: 0.3    // learning rate
+// });
+
+
+/**
+ * [TODO 3] Pick a collection of melodies that user will most likely like? or best matches their selection? (needs clarification)
+ * --> However, it is our own decision I guess......
+ */
+
+
+
+/**
+ * [TODO 4] Play that melody generated from above on the new page.
+ */
+
+
+/**
+ * [TODO 5] Allow user to start again if they want to. Probably in case they didn't like???
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

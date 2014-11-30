@@ -73,8 +73,6 @@
 					Math.pow(2, (note.tone - (OCTAVE_LENGTH*BASE_OCTAVE)) /OCTAVE_LENGTH) *
 					(time / SAMPLERATE);
 
-				// console.log(val);
-
 				// Get the ADSR amplitude.
 				var amp = ampFromADSR(
 					note.totalPlayed,
