@@ -1,3 +1,0 @@
-1. Use local storage on  different devices? So when the same user comes back, should I allow them to start again from where they left off?
-2. Should I allow reply melody?
-3. 

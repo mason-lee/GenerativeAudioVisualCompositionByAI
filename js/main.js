@@ -283,13 +283,13 @@ var net = new brain.NeuralNetwork();
 loadSynths(function(data) {
 	net.train(data, {
 		errorThresh: 0.005,  // error threshold to reach
-		iterations: 40000,   // maximum training iterations
+		iterations: 200000,   // maximum training iterations
 		log: true,           // console.log() progress periodically
 		logPeriod: 10,       // number of iterations between logging
 		learningRate: 0.3    // learning rate
 	});
 	// postMessage(JSON.stringify({type: 'result', net: net.toJSON()}));
-	net = net.toJSON();
+	console.log(JSON.stringify(net.toJSON()));
 });
 
 /**
