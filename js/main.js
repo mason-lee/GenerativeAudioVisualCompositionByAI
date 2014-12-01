@@ -260,36 +260,40 @@ $(".next-button").click(function() {
 /**
  * [TODO 0] Create another page that appears when user clicks "Train Neural Network" button -- "UI"
  */ 
-$(".train-button").click(function() {
+$("#progress-box").hide();
+$("#testing-box").hide();
 
+$(".train-button").click(function() {
+	$("#training-container").hide();
+	$("#progress-box").show();
 });
 
 /**
  * [TODO 1] Get data from "synths.json" file
  */
-var synthsParams;
+// var synthsParams;
 
-function loadSynths(callback) {
-	$.getJSON("js/synths.json", function(data) {
-		callback(data);
-	}).error(function(jqXhr, textStatus, error) {
-		console.log("ERROR: " + textStatus + ", " + error);
-	});
-}
+// function loadSynths(callback) {
+// 	$.getJSON("js/synths.json", function(data) {
+// 		callback(data);
+// 	}).error(function(jqXhr, textStatus, error) {
+// 		console.log("ERROR: " + textStatus + ", " + error);
+// 	});
+// }
 
 /**
  * [TODO 2] Plug the data to the Neural Network
  */
-var net = new brain.NeuralNetwork();
-loadSynths(function(data) {
-	net.train(data, {
-		errorThresh: 0.005,  // error threshold to reach
-		iterations: 20000,   // maximum training iterations
-		log: true,           // console.log() progress periodically
-		logPeriod: 10,       // number of iterations between logging
-		learningRate: 0.3    // learning rate
-	});
-});
+// var net = new brain.NeuralNetwork();
+// loadSynths(function(data) {
+// 	net.train(data, {
+// 		errorThresh: 0.005,  // error threshold to reach
+// 		iterations: 20000,   // maximum training iterations
+// 		log: true,           // console.log() progress periodically
+// 		logPeriod: 10,       // number of iterations between logging
+// 		learningRate: 0.3    // learning rate
+// 	});
+// });
 
 
 /**
@@ -302,10 +306,21 @@ loadSynths(function(data) {
 /**
  * [TODO 4] Play that melody generated from above on the new page.
  */
-
+ var tester = {
+ 	show: function(net) {
+ 		$("#progress-box").hide();
+ 		runNetwork = net.toFunction();
+ 		this.testRandom();
+ 		$("#testing-box").show();
+ 	},
+ 	
+ 	testMelody:function() {
+ 		// Play the jukebox in the end.
+ 	}
+ }
 
 /**
- * [TODO 5] Allow user to start again if they want to. Probably in case they didn't like???
+ * [TODO 5] Probably? Allow user to start again if they want to. Probably in case they didn't like???
  */
 
 
