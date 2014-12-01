@@ -4,9 +4,10 @@
  * @return {[type]} [description]
  */
 ;(function () {
+	var audioContext = new AudioContext();
 	var BASE_FREQUENCY = 440;
 	var OCTAVE_LENGTH = 12;
-	var SAMPLERATE = 44100;
+	var SAMPLERATE = audioContext.sampleRate;
 	var BUFFER_SIZE = 256;
 	var TEMPO = 120;
 	var BASE_OCTAVE = 4;
@@ -207,7 +208,7 @@
 		if (typeof note !== 'string' || !/^[CDEFGAB](\#|b)?[0-9]+$/.test(note)) {
 			throw new Error('Unable to read the note string format');
 		}
-		
+
 		var key = note[0];
 		var octave = note.slice(1, note.length);
 		if (octave[0] === '#' || octave[0] === 'b') {
