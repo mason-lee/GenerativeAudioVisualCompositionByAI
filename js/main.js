@@ -254,29 +254,42 @@ $(".next-button").click(function() {
 	}
 });
 
+// var data = JSON.stringify(localStorage.getItem("melodyLibrary"));
+// console.log(data);
+
 /**
  * [TODO 0] Create another page that appears when user clicks "Train Neural Network" button -- "UI"
  */ 
+$(".train-button").click(function() {
 
+});
 
 /**
  * [TODO 1] Get data from "synths.json" file
  */
+var synthsParams;
 
-
+function loadSynths(callback) {
+	$.getJSON("js/synths.json", function(data) {
+		callback(data);
+	}).error(function(jqXhr, textStatus, error) {
+		console.log("ERROR: " + textStatus + ", " + error);
+	});
+}
 
 /**
  * [TODO 2] Plug the data to the Neural Network
  */
-
-// var net = new brain.NeuralNetwork();
-// net.train(our data in a json file, {
-// 	errorThresh: 0.005,  // error threshold to reach
-// 	iterations: 20000,   // maximum training iterations
-// 	log: true,           // console.log() progress periodically
-// 	logPeriod: 10,       // number of iterations between logging
-// 	learningRate: 0.3    // learning rate
-// });
+var net = new brain.NeuralNetwork();
+loadSynths(function(data) {
+	net.train(data, {
+		errorThresh: 0.005,  // error threshold to reach
+		iterations: 20000,   // maximum training iterations
+		log: true,           // console.log() progress periodically
+		logPeriod: 10,       // number of iterations between logging
+		learningRate: 0.3    // learning rate
+	});
+});
 
 
 /**
