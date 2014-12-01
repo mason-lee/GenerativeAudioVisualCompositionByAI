@@ -242,8 +242,10 @@ $(".next-button").click(function() {
 		$(".stop-icon-wrapper").prop("disabled", false);
 		// save the melody and outuput to the localStorage
 		var data = { input: synth, output: melodySelection };
+		// console.log(data);
 		library.push(data);
 		store.set('melodyLibrary', library);
+		// console.log(library);
 	}
 	else {
 		var errorMsg = $("<span class='bg-danger select-message'>Please select at least one melody.</span>");
@@ -287,16 +289,29 @@ $(".train-button").click(function() {
 /**
  * [TODO 1] Get data from "synths.json" file
  */
-var synthsParams;
-function loadSynths(callback) {
-	$.getJSON("js/synths.json", function(data) {
-		callback(data);
-	}).error(function(jqXhr, textStatus, error) {
-		console.log("ERROR: " + textStatus + ", " + error);
-	});
-}
+// var synthsParams;
 
-var net = new brain.NeuralNetwork();
+// function loadSynths(callback) {
+// 	$.getJSON("js/synths.json", function(data) {
+// 		callback(data);
+// 	}).error(function(jqXhr, textStatus, error) {
+// 		console.log("ERROR: " + textStatus + ", " + error);
+// 	});
+// }
+
+/**
+ * [TODO 2] Plug the data to the Neural Network
+ */
+// var net = new brain.NeuralNetwork();
+// loadSynths(function(data) {
+// 	net.train(data, {
+// 		errorThresh: 0.005,  // error threshold to reach
+// 		iterations: 20000,   // maximum training iterations
+// 		log: true,           // console.log() progress periodically
+// 		logPeriod: 10,       // number of iterations between logging
+// 		learningRate: 0.3    // learning rate
+// 	});
+// });
 
 
 /**
