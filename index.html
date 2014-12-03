@@ -99,6 +99,16 @@
 		<script src="js/lib/jquery-2.1.1.js"></script>
 		<script src="js/lib/brain.js"></script>
 		<script src="js/lib/store.js"></script>
+		<script>
+			init()
+			function init() {
+				if (!store.enabled) {
+					alert('Local storage is not supported by your browser. Please disable "Private Mode", or upgrade to a modern browser.')
+					return
+				}
+				// var user = store.get('user');
+			}
+		</script>
 		<script src='js/audio.js'></script>
 		<script src='js/main.js'></script>
 	</body>
