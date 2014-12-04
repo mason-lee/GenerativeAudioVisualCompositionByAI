@@ -8,7 +8,7 @@ window.audioContext = new AudioContext();
 //	Creates echo
 function createDelay() {
 	var node = audioContext.createScriptProcessor(256, 2, 2);
-	var del = 250*(48000/1000);
+	var del = 250*(44100/1000);
 	var x = 0;
 	var lBuf = [];
 	var rBuf = [];
@@ -140,7 +140,7 @@ function leadSound(a, d, s, r, oscillatorIndex) {
 	var wave = waves[oscillatorIndex];
 	return function (note, time) {
 		var val =
-			440 * Math.pow(2, (note.tone - 36) / 12) * (time / 48000);
+			440 * Math.pow(2, (note.tone - 36) / 12) * (time / 44100);
 		var amp = synthastico.ampFromADSR(
 			note.totalPlayed,
 			a*(audioContext.sampleRate / 1000),
@@ -222,7 +222,7 @@ var qNum = parseInt($(".q-number").html());
 var library = store.get('melodyLibrary');
 if(!library) { library = []; }
 
-$(".test-box").hide();
+// $(".test-box").hide();
 // Dynamically add question number
 $(".next-button").click(function() {
 	// Only when checkbox is checked
@@ -230,7 +230,7 @@ $(".next-button").click(function() {
 		qNum++;
 		$(".q-number").empty();
 		$(".q-number").append(qNum);
-		if(qNum > 3) {
+		if(qNum > 5) {
 			$(".test-box").show();
 		}
 		$(".next-button").addClass("inactive");
@@ -260,56 +260,89 @@ $(".next-button").click(function() {
 /**
  * [TODO 0] Create another page that appears when user clicks "Train Neural Network" button -- "UI"
  */
-$("#progress-box").hide();
-$("#juke-box").hide();
+// $(".train-button").click(function() {
 
-$(".train-button").click(function() {
-	$("#training-container").hide();
-	$("#progress-box").show();
-	// start counting down as soon as player presses train network
-	// may need more
-	loadSynths(function(data) {
-	net.train(data, {
-		errorThresh: 0.005,  // error threshold to reach
-		iterations: 200000,   // maximum training iterations
-		log: true,           // console.log() progress periodically
-		logPeriod: 10,       // number of iterations between logging
-		learningRate: 0.3    // learning rate
-	});
-	// console.log(JSON.stringify(net.toJSON()));
-	tester.showProgress(net);
-	//show play button
-	tester.show();
-	});
-});
-
+// });
 
 /**
  * [TODO 1] Get data from "synths.json" file
  */
-// var synthsParams;
+var synthsParams;
 
-// function loadSynths(callback) {
-// 	$.getJSON("js/synths.json", function(data) {
-// 		callback(data);
-// 	}).error(function(jqXhr, textStatus, error) {
-// 		console.log("ERROR: " + textStatus + ", " + error);
-// 	});
-// }
+function loadSynths(callback) {
+	$.getJSON("js/synths.json", function(data) {
+		callback(data);
+	}).error(function(jqXhr, textStatus, error) {
+		console.log("ERROR: " + textStatus + ", " + error);
+	});
+}
 
 /**
  * [TODO 2] Plug the data to the Neural Network
  */
-// var net = new brain.NeuralNetwork();
+ var net = new brain.NeuralNetwork();
 // loadSynths(function(data) {
 // 	net.train(data, {
 // 		errorThresh: 0.005,  // error threshold to reach
 // 		iterations: 20000,   // maximum training iterations
 // 		log: true,           // console.log() progress periodically
 // 		logPeriod: 10,       // number of iterations between logging
-// 		learningRate: 0.3    // learning rate
+// 		learningRate: 0.5    // learning rate
 // 	});
+	// if(melodyLibrary == {dislike}){
+	// 	//ignore
+	// 	resetSynth();
+	// }
+
+	// else if(melodyLibrary == {like}){}
+
 // });
+
+// playLiked function(){
+// 	net.train(data);
+// }
+
+$("#progress-box").hide();
+$("#juke-box").hide();
+
+	$(".train-button").click(function() {
+		$("#training-container").hide();
+		$("#progress-box").show();
+	// start counting down as soon as player presses train network
+	// may need more
+		loadSynths(function(data) {
+		net.train(data, {
+			errorThresh: 0.005,  // error threshold to reach
+			iterations: 1000,   // maximum training iterations
+			log: true,           // console.log() progress periodically
+			logPeriod: 10,       // number of iterations between logging
+			learningRate: 0.3    // learning rate
+		});
+		// postMessage(JSON.stringify({type: 'result', net: net.toJSON()}));
+		net = net.toJSON();
+		console.log(net);
+		tester.showProgress(net);
+		//show play button
+		tester.show();
+		});
+
+	});
+
+	$("jukebox-play-icon-wrapper").click(function(){
+		jukeboxPlay = true;
+		if(jukeboxPlay) {
+			playSong();
+		      	$(".stop-icon-wrapper").prop("disabled", false);
+		      	$(this).prop("disabled", true);
+		      	jukeboxPlay = false;
+		}
+});
+
+// function testTrain(net){
+// 	var result = { input: utils.normalize(this.currentColor),
+//                output: { black : color == 'black' ? 1 : 0}};
+//     	this.data.push(result);
+// }
 
 
 /**
@@ -317,73 +350,15 @@ $(".train-button").click(function() {
  * --> However, it is our own decision I guess......
  */
 
-//continue from here.to generate second music player.
 
- var jukeboxPlay = false;
-$("jukebox-play-icon-wrapper").click(function(){
-
-});
-
-//getRandomParameters(function(){
-	// var net;
-
-	// var MAX = 1000; // Set it to a value that you want.
-	// var THETA_COEFF = Math.PI / MAX;
-	// var SCALE_INDEX_PHASE = ; // Set it to a value that you want.
-	// var OSCILLATOR_INDEX_PHASE; // Set it to a value that you want.
-	// var A_PHASE; // Set it to a value that you want.
-	// var D_PHASE; // Set it to a value that you want.
-	// var S_PHASE; // Set it to a value that you want.
-	// var R_PHASE; // Set it to a value that you want.
-
-	// // This is where all our candidate parameters will be.
-	// var candidates = [net];
-
-	// for (var i = 0; i < MAX; i++) {
-	//   candidates.push({
-	//     scaleIndex: Math.sin(i*THETA_COEFF + SCALE_INDEX_PHASE),
-	//     a: Math.sin(i*THETA_COEFF + A_PHASE),
-	//     d: Math.sin(i*THETA_COEFF + D_PHASE),
-	//     s: Math.sin(i*THETA_COEFF + S_PHASE),
-	//     r: Math.sin(i*THETA_COEFF + R_PHASE),
-	//     oscillatorIndex: Math.sin(i*THETA_COEFF + OSCILLATOR_INDEX_PHASE)
-	//   })
-	// }
-
-	// var likes = [];
-	// for (var i = 0; i < candidates.length; i++) {
-	//   var candidate = candidates[i];
-	//   var result = net.run(candidates[i]);
-	//   if (result.like > result.dislike) {
-	//     likes.push(candidate);
-	//   }
-	// }
-//});
 
 /**
  * [TODO 4] Play that melody generated from above on the new page.
  */
- var tester = {
- 	show: function(net) {
- 		$("#progress-box").hide();
- 		// runNetwork = net.toFunction();
- 		// this.testRandom();
- 		$("#juke-box").show();
- 	},
 
- 	testMelody:function() {
- 		// Play the jukebox in the end.
- 	},
- 	//
- 	 showProgress: function(progress){
-    		var completed = progress.iterations / loadSynths.iterations * 100;
-    		$("#progress-completed").css("width", completed + "%");
-
-  	}
-  }
 
 /**
- * [TODO 5] Probably? Allow user to start again if they want to. Probably in case they didn't like???
+ * [TODO 5] Allow user to start again if they want to. Probably in case they didn't like???
  */
 
 
