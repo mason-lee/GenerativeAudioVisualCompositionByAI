@@ -50,13 +50,13 @@ $('.choose input[type="checkbox"]').on('change', function() {
     if(this.checked) {
         $(".next-button").removeClass("inactive");
         if($(this).prop('value') == "yes") {
-            // Store oupt values to the melodySelection variable
-            // which will be stored to localStorage as an ouput later
+            // Store output values to the melodySelection variable
+            // which will be stored to localStorage as an output later
             melodySelection = {like : 1};
         }
         else if ($(this).prop('value') == "no") {
-            // Store oupt values to the melodySelection variable
-            // which will be stored to localStorage as an ouput later
+            // Store output values to the melodySelection variable
+            // which will be stored to localStorage as an output later
             melodySelection = {dislike: 1};
         }
     }
@@ -77,7 +77,7 @@ $(".next-button").click(function() {
         qNum++;
         $(".q-number").empty();
         $(".q-number").append(qNum);
-        if(qNum > 3) {
+        if(qNum > 5) {
             $(".test-box").show();
         }
         $(".next-button").addClass("inactive");
@@ -101,9 +101,19 @@ $(".next-button").click(function() {
     }
 });
 
-/**
- * [TODO 0] Create another page that appears when user clicks "Train Neural Network" button -- "UI"
- */
+
+var synthsParams;
+
+function loadSynths(callback) {
+    $.getJSON("/synths.json", function(data) {
+        callback(data);
+    }).error(function(jqXhr, textStatus, error) {
+        console.log("ERROR: " + textStatus + ", " + error);
+    });
+}
+
+var net = new brain.NeuralNetwork();
+
 $(".train-button").click(function() {
     $("#training-container").hide();
     $("#progress-box").show();
@@ -112,64 +122,31 @@ $(".train-button").click(function() {
     loadSynths(function(data) {
     net.train(data, {
         errorThresh: 0.005,  // error threshold to reach
-        iterations: 200000,   // maximum training iterations
+        iterations: 20000,   // maximum training iterations
         log: true,           // console.log() progress periodically
         logPeriod: 10,       // number of iterations between logging
         learningRate: 0.3    // learning rate
     });
+    // Print neurons
     // console.log(JSON.stringify(net.toJSON()));
+    var neurons = JSON.stringify(net.toJSON());
     tester.showProgress(net);
     //show play button
     tester.show();
     });
 });
 
-//continue from here.to generate second music player.
-
 var jukeboxPlay = false;
-    $("jukebox-play-icon-wrapper").click(function(){
-
+$("jukebox-play-icon-wrapper").click(function(){
+    jukeboxPlay = true;
+    if (jukeboxPlay) {
+        playSong();
+        $(".stop-icon-wrapper").prop("disabled", false);
+        $(this).prop("disabled", true);
+        jukeboxPlay = false;
+    }
 });
 
-//getRandomParameters(function(){
-    // var net;
-
-    // var MAX = 1000; // Set it to a value that you want.
-    // var THETA_COEFF = Math.PI / MAX;
-    // var SCALE_INDEX_PHASE = ; // Set it to a value that you want.
-    // var OSCILLATOR_INDEX_PHASE; // Set it to a value that you want.
-    // var A_PHASE; // Set it to a value that you want.
-    // var D_PHASE; // Set it to a value that you want.
-    // var S_PHASE; // Set it to a value that you want.
-    // var R_PHASE; // Set it to a value that you want.
-
-    // // This is where all our candidate parameters will be.
-    // var candidates = [net];
-
-    // for (var i = 0; i < MAX; i++) {
-    //   candidates.push({
-    //     scaleIndex: Math.sin(i*THETA_COEFF + SCALE_INDEX_PHASE),
-    //     a: Math.sin(i*THETA_COEFF + A_PHASE),
-    //     d: Math.sin(i*THETA_COEFF + D_PHASE),
-    //     s: Math.sin(i*THETA_COEFF + S_PHASE),
-    //     r: Math.sin(i*THETA_COEFF + R_PHASE),
-    //     oscillatorIndex: Math.sin(i*THETA_COEFF + OSCILLATOR_INDEX_PHASE)
-    //   })
-    // }
-
-    // var likes = [];
-    // for (var i = 0; i < candidates.length; i++) {
-    //   var candidate = candidates[i];
-    //   var result = net.run(candidates[i]);
-    //   if (result.like > result.dislike) {
-    //     likes.push(candidate);
-    //   }
-    // }
-//});
-
-/**
- * [TODO 4] Play that melody generated from above on the new page.
- */
  var tester = {
     show: function(net) {
         $("#progress-box").hide();
@@ -185,22 +162,5 @@ var jukeboxPlay = false;
      showProgress: function(progress){
             var completed = progress.iterations / loadSynths.iterations * 100;
             $("#progress-completed").css("width", completed + "%");
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

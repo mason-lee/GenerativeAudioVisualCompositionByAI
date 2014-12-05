@@ -1,5 +1,0 @@
-[
-	{input: melody1, output: [1] },
-	{input: melody2, output:  [0] },
-	{input: melody3, output: [1] }
-]
