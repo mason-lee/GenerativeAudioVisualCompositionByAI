@@ -1,12 +1,54 @@
-function createParameters(synthParams) {
-  return {
-    scaleIndex: Math.floor(synthParams.scaleIndex * scales.length),
-    a: Math.floor(synthParams.a * A),
-    d: Math.floor(synthParams.d * D),
-    s: synthParams.s,
-    r: Math.floor(synthParams.r * R),
-    oscillatorIndex: Math.floor(synthParams.oscillatorIndex * waves.length)
-  }
+window.audioContext = new AudioContext();
+//  Creates echo
+function createDelay() {
+    var node = audioContext.createScriptProcessor(256, 2, 2);
+    var del = 250*(48000/1000);
+    var x = 0;
+    var lBuf = [];
+    var rBuf = [];
+    node.onaudioprocess = function (e) {
+        var lIn = e.inputBuffer.getChannelData(0);
+        var rIn = e.inputBuffer.getChannelData(1);
+
+        var lOut = e.outputBuffer.getChannelData(0);
+        var rOut = e.outputBuffer.getChannelData(1);
+
+        for (var i = 0; i < lIn.length; i++) {
+            var l = lIn[i];
+            var r = rIn[i];
+
+            if (x >= del) {
+                var lBufVal = lBuf.shift();
+                var rBufVal = rBuf.shift();
+
+                var lOld = l;
+                var rOld = r;
+
+                l = l + lBufVal*0.6;
+                r = r + rBufVal*0.6;
+            }
+
+            lBuf.push(l);
+            rBuf.push(r);
+
+            lOut[i] = l;
+            rOut[i] = r;
+
+            x++;
+        }
+    };
+    return node;
+}
+
+function pickSynthParameters() {
+    return {
+        scaleIndex: Math.random(),
+        a: Math.random(),
+        d: Math.random(),
+        s: Math.random(),
+        r: Math.random(),
+        oscillatorIndex: Math.random()
+    }
 }
 
 function generateMelody(scaleIndex) {
@@ -30,6 +72,18 @@ function generateMelody(scaleIndex) {
   return notesLead;
 }
 
+var delay = createDelay();
+var reverb = audioContext.createConvolver();
+
+// Create buffer source
+var noiseBuffer = audioContext.createBuffer(2, audioContext.sampleRate/2, audioContext.sampleRate);
+var left = noiseBuffer.getChannelData(0);
+var right = noiseBuffer.getChannelData(1);
+for (var i = 0; i < noiseBuffer.length; i++) {
+    right[i] = left[i] = Math.random() * 2 - 1;
+}
+reverb.buffer = noiseBuffer;
+
 function leadSound(a, d, s, r, oscillatorIndex) {
   var random = Math.floor(Math.random() * waves.length);
   var wave = waves[oscillatorIndex];
@@ -46,3 +100,5 @@ function leadSound(a, d, s, r, oscillatorIndex) {
     return wave(val)*amp;
   }
 }
+
+delay.connect(audioContext.destination);

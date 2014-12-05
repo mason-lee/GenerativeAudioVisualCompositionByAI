@@ -1,115 +1,117 @@
 <!doctype html>
 
 <html lang='en'>
-	<head>
-		<meta charset='utf-8'>
-		<title>AI - Generative Music and Visualizer</title>
-		<link rel="stylesheet" href="css/bootstrap.css">
-		<link rel="stylesheet" href="css/bootstrap-theme.css">
-		<link rel="stylesheet" href="css/style.css">
-	</head>
-	<body>
-		<div class="wrapper">
-			<nav class="navbar navbar-default navbar-static-top">
-				<div class="container">
-					<div class="navbar-header">
-						<a href="/" class="navbar-brand">
-							Generate a sound according to your taste
-						</a>
-					</div>
-					<div id="navbar" class="navbar-collapse collapse">
-						<ul class="nav navbar-nav">
-							<li>
-								<!-- <a><span class="title">Generate a sound according to your taste</span></a> -->
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-			<div class="container">
-				<div id="training-container">
-					<div class="training-box clearfix">
-						<div class="question-number">
-							Melody
-							<span class="q-number">1</span>
-							<span>
-								- Play the melody and select the one you prefer.
-							</span>
-						</div>
-						<div class="button-wrapper">
-							<button class="icon-wrapper btn btn-default play-icon-wrapper">
-								<span class="glyphicon glyphicon-play play-icon"></span>
-								<span class="glyphicon-class play-icon">Play</span>
-							</button>
-							<button class="icon-wrapper btn btn-default stop-icon-wrapper">
-								<span class='glyphicon glyphicon-stop stop-icon'></span>
-								<span class='glyphicon-class stop-icon'>Stop</span>
-							</button>
-						</div>
-						<div class="choose">
-							<h5>Q. Do you like this melody?</h5>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" name="selection" value="yes">Yes
-								</label><br>
-								<label>
-									<input type="checkbox" name="selection" value="no">No
-								</label>
-							</div>
-						</div>
-						<span class="next-button pull-left btn inactive">
-							Next
-							<i class="glyphicon glyphicon-chevron-right"></i>
-						</span>
-					</div>
-					<div class="test-box">
-						<span class="btn btn-success train-button">Train neural network</span>
-					</div>
-					<div class="bottom-section">
-						<div class="container">
-							<p>
-								You can train the network at any point, but the more sound selections you give it, the better.
-							</p>
-						</div>
-					</div>
-				</div><!--End #training-container-->
-				<div id="progress-box">
-					<div id="training-message">
-						training network...
-					</div>
-					<div id="progress-bar">
-						<div id="progress-completed">
-						</div>
-					</div>
-				</div><!--End progress-box-->
-				<div id="testing-box">
-					<span class="btn btn-info">
-						Play a song
-					</span>
-				<div id="juke-box">
-					<button class="icon-wrapper btn btn-default jukebox-play-icon-wrapper">
-						<span class="glyphicon glyphicon-play play-icon"></span>
-						<span class="glyphicon-class play-icon">Play JukeBox</span>
-					</button>
-				</div>
+    <head>
+        <meta charset='utf-8'>
+        <title>AI - Generative Music and Visualizer</title>
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div class="wrapper">
+            <nav class="navbar navbar-default navbar-static-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a href="/" class="navbar-brand">
+                            Generate a sound according to your taste
+                        </a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <!-- <a><span class="title">Generate a sound according to your taste</span></a> -->
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="container">
+                <div id="training-container">
+                    <div class="training-box clearfix">
+                        <div class="question-number">
+                            Melody
+                            <span class="q-number">1</span>
+                            <span>
+                                - Play the melody and select the one you prefer.
+                            </span>
+                        </div>
+                        <div class="button-wrapper">
+                            <button class="icon-wrapper btn btn-default play-icon-wrapper">
+                                <span class="glyphicon glyphicon-play play-icon"></span>
+                                <span class="glyphicon-class play-icon">Play</span>
+                            </button>
+                            <button class="icon-wrapper btn btn-default stop-icon-wrapper">
+                                <span class='glyphicon glyphicon-stop stop-icon'></span>
+                                <span class='glyphicon-class stop-icon'>Stop</span>
+                            </button>
+                        </div>
+                        <div class="choose">
+                            <h5>Q. Do you like this melody?</h5>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="selection" value="yes">Yes
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" name="selection" value="no">No
+                                </label>
+                            </div>
+                        </div>
+                        <span class="next-button pull-left btn inactive">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </span>
+                    </div>
+                    <div class="test-box">
+                        <span class="btn btn-success train-button">Train neural network</span>
+                    </div>
+                    <div class="bottom-section">
+                        <div class="container">
+                            <p>
+                                You can train the network at any point, but the more sound selections you give it, the better.
+                            </p>
+                        </div>
+                    </div>
+                </div><!--End #training-container-->
+                <div id="progress-box">
+                    <div id="training-message">
+                        training network...
+                    </div>
+                    <div id="progress-bar">
+                        <div id="progress-completed">
+                        </div>
+                    </div>
+                </div><!--End progress-box-->
+                <div id="testing-box">
+                    <span class="btn btn-info">
+                        Play a song
+                    </span>
+                <div id="juke-box">
+                    <button class="icon-wrapper btn btn-default jukebox-play-icon-wrapper">
+                        <span class="glyphicon glyphicon-play play-icon"></span>
+                        <span class="glyphicon-class play-icon">Play JukeBox</span>
+                    </button>
+                </div>
 
 
-			</div><!--End container-->
-		</div><!--End wrapper-->
-		<script src="js/lib/jquery-2.1.1.js"></script>
-		<script src="js/lib/brain.js"></script>
-		<script src="js/lib/store.js"></script>
-		<script>
-			init()
-			function init() {
-				if (!store.enabled) {
-					alert('Local storage is not supported by your browser. Please disable "Private Mode", or upgrade to a modern browser.')
-					return
-				}
-				// var user = store.get('user');
-			}
-		</script>
-		<script src='js/lib/audio.js'></script>
-		<script src='js/main.js'></script>
-	</body>
+            </div><!--End container-->
+        </div><!--End wrapper-->
+        <script src="js/lib/jquery-2.1.1.js"></script>
+        <script src="js/lib/brain.js"></script>
+        <script src="js/lib/store.js"></script>
+        <script>
+            init()
+            function init() {
+                if (!store.enabled) {
+                    alert('Local storage is not supported by your browser. Please disable "Private Mode", or upgrade to a modern browser.')
+                    return
+                }
+                // var user = store.get('user');
+            }
+        </script>
+        <script src='js/lib/audio.js'></script>
+        <script src="js/files/params.js"></script>
+        <script src="js/files/functions.js"></script>
+        <script src='js/main.js'></script>
+    </body>
 </html>
