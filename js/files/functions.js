@@ -73,7 +73,9 @@ function generateMelody(scaleIndex) {
 }
 
 var delay = createDelay();
-var reverb = audioContext.createConvolver();
+// var reverb = audioContext.createConvolver();
+
+var reverb = new SimpleReverb(audioContext);
 
 // Create buffer source
 var noiseBuffer = audioContext.createBuffer(2, audioContext.sampleRate/2, audioContext.sampleRate);
@@ -82,7 +84,7 @@ var right = noiseBuffer.getChannelData(1);
 for (var i = 0; i < noiseBuffer.length; i++) {
     right[i] = left[i] = Math.random() * 2 - 1;
 }
-reverb.buffer = noiseBuffer;
+// reverb.buffer = noiseBuffer;
 
 function leadSound(a, d, s, r, oscillatorIndex) {
   var random = Math.floor(Math.random() * waves.length);

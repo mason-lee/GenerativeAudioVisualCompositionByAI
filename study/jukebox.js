@@ -19,8 +19,7 @@ var R_PERIOD = 1.5;
  
 // This is where all our candidate parameters will be.
 var candidates = [];
- 
-for (var i = 0; i < MAX; i++) {
+ for (var i = 0; i < MAX; i++) {
     candidates.push({
         scaleIndex: (Math.sin(i*THETA_COEFF + SCALE_INDEX_PHASE) + 1)/2,
         a: (Math.sin(i*THETA_COEFF*A_PERIOD + A_PHASE) + 1) / 2,

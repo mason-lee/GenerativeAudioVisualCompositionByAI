@@ -102,65 +102,124 @@ $(".next-button").click(function() {
 });
 
 
-var synthsParams;
-
-function loadSynths(callback) {
-    $.getJSON("/synths.json", function(data) {
-        callback(data);
-    }).error(function(jqXhr, textStatus, error) {
-        console.log("ERROR: " + textStatus + ", " + error);
-    });
-}
-
-var net = new brain.NeuralNetwork();
-
 $(".train-button").click(function() {
     $("#training-container").hide();
     $("#progress-box").show();
+
+    // Call train
+    setTimeout(function () {
+        train();
+    }, 1000);
+});
+
+
+function train() {
+    var net = new brain.NeuralNetwork();
+    var data = JSON.parse(localStorage.getItem("melodyLibrary"));
     // start counting down as soon as player presses train network
     // may need more
-    loadSynths(function(data) {
     net.train(data, {
         errorThresh: 0.005,  // error threshold to reach
-        iterations: 20000,   // maximum training iterations
-        log: true,           // console.log() progress periodically
-        logPeriod: 10,       // number of iterations between logging
-        learningRate: 0.3    // learning rate
+        iterations: 10000,   // maximum training iterations
+        // log: true,           // console.log() progress periodically
+        // logPeriod: 10,       // number of iterations between logging
+        learningRate: 0.3,    // learning rate
+        callbackPeriod: 100,
+        callback: function (info) {
+            // Grab
+            //   info.error, info.iterations / max iterations
+            var completed = (info.iterations / 10000) * 100;
+            $("#progress-completed").css("width", completed);
+        }
     });
-    // Print neurons
-    // console.log(JSON.stringify(net.toJSON()));
-    var neurons = JSON.stringify(net.toJSON());
-    tester.showProgress(net);
-    //show play button
-    tester.show();
-    });
-});
-
-var jukeboxPlay = false;
-$("jukebox-play-icon-wrapper").click(function(){
-    jukeboxPlay = true;
-    if (jukeboxPlay) {
-        playSong();
-        $(".stop-icon-wrapper").prop("disabled", false);
-        $(this).prop("disabled", true);
-        jukeboxPlay = false;
-    }
-});
-
- var tester = {
-    show: function(net) {
-        $("#progress-box").hide();
-        // runNetwork = net.toFunction();
-        // this.testRandom();
-        $("#juke-box").show();
-    },
-
-    testMelody:function() {
-        // Play the jukebox in the end.
-    },
-    //
-     showProgress: function(progress){
-            var completed = progress.iterations / loadSynths.iterations * 100;
-            $("#progress-completed").css("width", completed + "%");
-    }
+    
+    var neurons = net.toJSON();
+    jukebox(neurons);
 }
+
+function jukebox(neurons) {
+    var net = new brain.NeuralNetwork();
+    net.fromJSON(neurons);
+    var MAX = 1000;
+    var THETA_COEFF = Math.PI / MAX;
+    var SCALE_INDEX_PHASE = Math.PI / 3; 
+    var OSCILLATOR_INDEX_PHASE = Math.PI / 2;
+    var A_PHASE = Math.PI / 4;
+    var D_PHASE = Math.PI / 6;
+    var S_PHASE = 3*Math.PI / 4;
+    var R_PHASE = 3*Math.PI / 2;
+    var A_PERIOD = 0.5;
+    var D_PERIOD = 0.25;
+    var S_PERIOD = 3;
+    var R_PERIOD = 1.5;
+     
+    // This is where all our candidate parameters will be.
+    var candidates = [];
+     for (var i = 0; i < MAX; i++) {
+        candidates.push({
+            scaleIndex: (Math.sin(i*THETA_COEFF + SCALE_INDEX_PHASE) + 1)/2,
+            a: (Math.sin(i*THETA_COEFF*A_PERIOD + A_PHASE) + 1) / 2,
+            d: (Math.sin(i*THETA_COEFF*D_PERIOD + D_PHASE) + 1) / 2,
+            s: (Math.sin(i*THETA_COEFF*S_PERIOD + S_PHASE) + 1) / 2,
+            r: (Math.sin(i*THETA_COEFF*R_PERIOD + R_PHASE) + 1) / 2,
+            oscillatorIndex: (Math.sin(i*THETA_COEFF + OSCILLATOR_INDEX_PHASE) + 1) / 2
+        })
+    }
+
+    var likes = [];
+    for (var i = 0; i < candidates.length; i++) {
+        var candidate = candidates[i];
+        var result = net.run(candidates[i]);
+        if (result.like > result.dislike) {
+            likes.push(candidate);
+        }
+    }
+
+    // Now, we have a set of parameters that we think that the user will like.
+    // Either play them sequentially, or shuffle them.
+    // Here, we are going to loop through each melody at every 30 seconds.
+    var audioContext = new AudioContext();
+    var lead;
+
+    function createParameters(synthParams) {
+     return {
+         scaleIndex: Math.floor(synthParams.scaleIndex * scales.length),
+         a: Math.floor(synthParams.a * A),
+         d: Math.floor(synthParams.d * D),
+         s: synthParams.s,
+         r: Math.floor(synthParams.r * R),
+         oscillatorIndex: Math.floor(synthParams.oscillatorIndex * waves.length)
+     }
+    }//End createParameters
+    $("#progress-box").hide();
+    $("#juke-box").show();
+    function playSong() {
+        // We're going to pick a random parameter from the set of parameters that the
+        // artificial intelligence engine believes that the user will like.
+        var index = Math.floor(Math.random() * likes.length);
+        var parameters = createParameters(likes[index]);
+           var notesLead = generateMelody(parameters.scaleIndex);
+           lead = synthastico.createSynth(audioContext, notesLead);
+           lead.sound = leadSound(
+                parameters.a,
+                parameters.d,
+                parameters.s,
+                parameters.r,
+                parameters.oscillatorIndex
+            );
+           lead.connect(audioContext.destination);
+       }
+       
+    function stopSong() {
+        if (lead) { lead.disconnect(); }
+     }
+
+     function play() {
+          stopSong();
+          playSong();
+      }
+    $(".jukebox-play-icon-wrapper").click(function() {
+        play();
+        setInterval(play, 10000);
+    });
+}//End jukebox
